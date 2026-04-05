@@ -1,5 +1,5 @@
-import { fetchEnergyPrices } from '../fetchers/ofgem.fetcher.js'
-import { insertScrapeLog }   from '../db/queries/scrapeLogs.js'
+import { fetchEnergyPrices } from '../../lib/fetchers/ofgem.fetcher.js'
+import { insertScrapeLog }   from '../../lib/db/queries/scrapeLogs.js'
 
 // Triggers: Ofgem electricity and gas price cap (quarterly — Jan, Apr, Jul, Oct)
 export default async function handler(req, res) {

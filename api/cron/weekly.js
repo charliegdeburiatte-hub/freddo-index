@@ -1,5 +1,5 @@
-import { fetchPetrolPrice }  from '../fetchers/beis.fetcher.js'
-import { insertScrapeLog }   from '../db/queries/scrapeLogs.js'
+import { fetchPetrolPrice }  from '../../lib/fetchers/beis.fetcher.js'
+import { insertScrapeLog }   from '../../lib/db/queries/scrapeLogs.js'
 
 // Triggers: BEIS petrol prices (weekly), National Rail (manual for now)
 export default async function handler(req, res) {
