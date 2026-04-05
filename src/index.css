@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Rufina:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Rufina', serif;
+}
+
+body {
+  background-color: #0F0F0F;
+  color: #F2F2F2;
+  min-height: 100vh;
+}
