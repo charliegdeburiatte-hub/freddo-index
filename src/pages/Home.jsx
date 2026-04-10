@@ -5,6 +5,9 @@ import Hero from '../components/layout/Hero'
 import FreddoPrice from '../components/freddo/FreddoPrice'
 import { useHomeItems } from '../hooks/useItemPrice'
 import ItemCard from '../components/items/ItemCard'
+import LifetimeFreddosCard from '../components/life/LifetimeFreddosCard'
+import PostcodeGapCard from '../components/life/PostcodeGapCard'
+import FreddoTicker from '../components/life/FreddoTicker'
 
 // Group home items by category for the curated section
 const CATEGORY_ORDER = ['utilities', 'food', 'housing', 'society', 'big-and-stupid']
@@ -24,6 +27,17 @@ export default function Home() {
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-8 space-y-12">
         <Hero />
         <FreddoPrice />
+
+        <section>
+          <p className="text-xs font-semibold tracking-widest uppercase mb-6" style={{ color: '#A0A0A0' }}>
+            UK Life Expectancy — In Freddos
+          </p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <LifetimeFreddosCard />
+            <PostcodeGapCard />
+            <FreddoTicker />
+          </div>
+        </section>
 
         {curated.length > 0 && (
           <section>

@@ -95,7 +95,34 @@ CREATE INDEX scrape_logs_status_idx  ON scrape_logs (status);
 
 
 -- ============================================================
--- 5. FREDDO_CONVERSIONS — computed view (not a table)
+-- 5. LIFE_EXPECTANCY_RECORDS — UK life expectancy at birth
+-- Years, not pence — needs its own table.
+-- Append-only; one row per (region, sex, source release).
+-- ============================================================
+
+CREATE TABLE life_expectancy_records (
+  id           uuid         PRIMARY KEY DEFAULT gen_random_uuid(),
+  region       text         NOT NULL,
+  region_kind  text         NOT NULL,
+  sex          text         NOT NULL,
+  years        numeric(4,2) NOT NULL,
+  source_year  integer      NOT NULL,
+  source       text         NOT NULL,
+  recorded_at  timestamptz  NOT NULL DEFAULT now()
+);
+
+ALTER TABLE life_expectancy_records ADD CONSTRAINT le_sex_check
+  CHECK (sex IN ('male', 'female', 'all'));
+ALTER TABLE life_expectancy_records ADD CONSTRAINT le_region_kind_check
+  CHECK (region_kind IN ('national', 'local-authority'));
+
+CREATE INDEX le_region_idx      ON life_expectancy_records (region);
+CREATE INDEX le_recorded_at_idx ON life_expectancy_records (recorded_at DESC);
+CREATE INDEX le_kind_sex_idx    ON life_expectancy_records (region_kind, sex);
+
+
+-- ============================================================
+-- 6. FREDDO_CONVERSIONS — computed view (not a table)
 -- ============================================================
 
 CREATE VIEW freddo_conversions AS
@@ -136,22 +163,24 @@ WHERE i.is_active = true;
 
 
 -- ============================================================
--- 6. ROW LEVEL SECURITY — public reads, server-only writes
+-- 7. ROW LEVEL SECURITY — public reads, server-only writes
 -- ============================================================
 
-ALTER TABLE items         ENABLE ROW LEVEL SECURITY;
-ALTER TABLE freddo_prices ENABLE ROW LEVEL SECURITY;
-ALTER TABLE price_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE scrape_logs   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE items                    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE freddo_prices            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE price_records            ENABLE ROW LEVEL SECURITY;
+ALTER TABLE scrape_logs              ENABLE ROW LEVEL SECURITY;
+ALTER TABLE life_expectancy_records  ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Public read" ON items         FOR SELECT USING (true);
-CREATE POLICY "Public read" ON freddo_prices FOR SELECT USING (true);
-CREATE POLICY "Public read" ON price_records FOR SELECT USING (true);
-CREATE POLICY "Public read" ON scrape_logs   FOR SELECT USING (true);
+CREATE POLICY "Public read" ON items                    FOR SELECT USING (true);
+CREATE POLICY "Public read" ON freddo_prices            FOR SELECT USING (true);
+CREATE POLICY "Public read" ON price_records            FOR SELECT USING (true);
+CREATE POLICY "Public read" ON scrape_logs              FOR SELECT USING (true);
+CREATE POLICY "Public read" ON life_expectancy_records  FOR SELECT USING (true);
 
 
 -- ============================================================
--- 7. SEED — initial items catalogue
+-- 8. SEED — initial items catalogue
 -- ============================================================
 
 INSERT INTO items (slug, name, emoji, category, unit, snide_remark, data_source, update_frequency, scraper_priority, display_on_home) VALUES
