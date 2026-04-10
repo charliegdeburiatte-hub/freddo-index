@@ -18,13 +18,17 @@ export const SUPERMARKET_LABELS = {
   coop:             'Co-op',
   iceland:          'Iceland',
   ocado:            'Ocado',
+  onestop:          'One Stop',
+  cadburydirect:    'Cadbury Gift Direct',
   national_average: 'National Average',
 }
 
 // Why: Co-op gets a permanent parenthetical — see copy & tone guide
 export const SUPERMARKET_ASIDE = {
-  coop:      '(of course it is)',
-  morrisons: '(ew)',
-  waitrose:  '',
-  ocado:     '',
+  coop:          '(of course it is)',
+  morrisons:     '(ew)',
+  waitrose:      '',
+  ocado:         '',
+  onestop:       '(the corner shop)',
+  cadburydirect: '(the factory itself)',
 }
