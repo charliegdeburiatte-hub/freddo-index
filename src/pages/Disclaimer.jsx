@@ -48,6 +48,8 @@ export default function Disclaimer() {
                 ["Waitrose", "works perfectly. Costs us emotionally every time we see the numbers."],
                 ["Iceland", "surprisingly solid. Mums everywhere vindicated."],
                 ["Ocado", "functions flawlessly. We feel judged the entire time."],
+                ["One Stop", "the corner shop. If they have Freddos, the price is real."],
+                ["Cadbury Gift Direct", "the factory itself. The Cadbury price. Benchmark."],
               ].map(([name, note]) => (
                 <li key={name}><span style={{ color: '#F2F2F2' }}>{name}</span> — {note}</li>
               ))}

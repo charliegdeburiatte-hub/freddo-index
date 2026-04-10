@@ -11,20 +11,22 @@ export default function SupermarketTable({ supermarkets }) {
     )
   }
 
-  const maxPrice = Math.max(...supermarkets.map(s => s.price_pence))
+  const available = supermarkets.filter(s => s.is_available && s.price_pence > 0)
+  const unavailable = supermarkets.filter(s => !s.is_available || s.price_pence === 0)
+  const maxPrice = available.length > 0 ? Math.max(...available.map(s => s.price_pence)) : 1
 
   return (
     <div className="mt-4 space-y-2">
-      {supermarkets.map(s => (
+      {available.map(s => (
         <div key={s.supermarket} className="flex items-center gap-3">
-          <span className="text-sm w-28 shrink-0" style={{ color: '#A0A0A0' }}>
+          <div className="text-sm shrink-0" style={{ color: '#A0A0A0', minWidth: '7.5rem' }}>
             {SUPERMARKET_LABELS[s.supermarket] ?? s.supermarket}
             {SUPERMARKET_ASIDE[s.supermarket] && (
               <span className="ml-1 text-xs" style={{ color: '#555555' }}>
                 {SUPERMARKET_ASIDE[s.supermarket]}
               </span>
             )}
-          </span>
+          </div>
 
           <div className="flex-1 h-2 rounded-none" style={{ background: 'rgba(76,175,80,0.12)' }}>
             <div
@@ -39,6 +41,16 @@ export default function SupermarketTable({ supermarkets }) {
           {s.is_stale && <StaleIndicator recordedAt={s.scraped_at} />}
         </div>
       ))}
+
+      {unavailable.length > 0 && (
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 pt-3" style={{ borderTop: '1px solid rgba(76,175,80,0.15)' }}>
+          {unavailable.map(s => (
+            <span key={s.supermarket} className="text-xs italic" style={{ color: '#555555' }}>
+              {SUPERMARKET_LABELS[s.supermarket] ?? s.supermarket} — no single Freddo
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

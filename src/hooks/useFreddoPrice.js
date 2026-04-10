@@ -20,13 +20,20 @@ export const useFreddoPrice = () => {
 
         if (avgErr && avgErr.code !== 'PGRST116') throw avgErr
 
-        const cutoff = new Date(Date.now() - 25 * 60 * 60 * 1000).toISOString()
-        const { data: supermarkets, error: superErr } = await supabase
+        // Fetch latest row per supermarket (no time cutoff — is_stale flag handles staleness visually)
+        const { data: allRows, error: superErr } = await supabase
           .from('freddo_prices')
           .select('supermarket, price_pence, is_available, is_stale, scraped_at')
           .neq('supermarket', 'national_average')
-          .gte('scraped_at', cutoff)
-          .order('price_pence', { ascending: true })
+          .order('scraped_at', { ascending: false })
+
+        // Keep only the most recent row per supermarket
+        const seen = new Set()
+        const supermarkets = (allRows || []).filter(r => {
+          if (seen.has(r.supermarket)) return false
+          seen.add(r.supermarket)
+          return true
+        }).sort((a, b) => a.price_pence - b.price_pence)
 
         if (superErr) throw superErr
 
