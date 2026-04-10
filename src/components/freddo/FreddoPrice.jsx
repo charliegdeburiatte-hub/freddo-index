@@ -40,7 +40,7 @@ export default function FreddoPrice() {
           <SupermarketTable supermarkets={data?.supermarkets} />
 
           <p className="text-sm italic mt-6" style={{ color: '#555555' }}>
-            Was 10p in 2000. A 330% increase.
+            Was 10p in 2000. A 290% increase.
             The Bank of England targets 2% annual inflation. Just saying.
           </p>
         </>
